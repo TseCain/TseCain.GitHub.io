@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>凑单计算器</title>
+<style>
+    .result {
+        margin-top: 20px;
+    }
+</style>
+</head>
+<body>
+<h1>凑单计算器</h1>
+
+<label for="obj">obj:</label>
+<input type="text" id="obj"><br>
+
+<label for="starTH">starTH:</label>
+<input type="text" id="starTH"><br>
+
+<label for="starRED">starRED:</label>
+<input type="text" id="starRED"><br>
+
+<label for="bkTH">bkTH:</label>
+<input type="text" id="bkTH"><br>
+
+<label for="bkRED">bkRED:</label>
+<input type="text" id="bkRED"><br>
+
+<button onclick="calculate()">计算</button>
+
+<div class="result">
+    <p>***凑单攻略如下，请：</p>
+    <p id="result-starADD"></p>
+    <p id="result-bkADD"></p>
+
+    <p>***请通过实付验算：</p>
+    <p id="result-star"></p>
+    <p id="result-bk"></p>
+    
+    <p>***薅羊毛：</p>
+    <p id="result-pay"></p>
+    <p id="result-discount"></p>
+    <p>***</p>
+</div>
+
+<script>
+function calculate() {
+    var obj = parseFloat(document.getElementById("obj").value);
+    var starTH = parseFloat(document.getElementById("starTH").value);
+    var starRED = parseFloat(document.getElementById("starRED").value);
+    var bkTH = parseFloat(document.getElementById("bkTH").value);
+    var bkRED = parseFloat(document.getElementById("bkRED").value);
+
+    var bkRate = (bkTH - bkRED) / bkTH;
+
+    var bkADD = bkTH - obj;
+    var obj_ = obj * bkRate;
+    var starADD = starTH - obj_;
+
+    var pay_bk = obj + bkADD;
+    var rate_bk = (pay_bk - bkRED) / pay_bk;
+    var pay_star = obj_ + starADD;
+    var rate_star = (pay_star - starRED) / pay_star;
+
+    var pay_starADD = starADD * rate_star;
+    var pay_bkADD = bkADD * rate_bk;
+    var pay_obj = obj * rate_bk * rate_star;
+    var rate_obj = pay_obj / (obj * 2);
+
+    document.getElementById("result-star").innerHTML = "星球凑单实付: " + pay_starADD.toFixed(2);
+    document.getElementById("result-bk").innerHTML = "博库凑单实付: " + pay_bkADD.toFixed(2);
+    document.getElementById("result-pay").innerHTML = "支付: " + pay_obj.toFixed(3);
+    document.getElementById("result-discount").innerHTML = "折扣: " + rate_obj.toFixed(3);
+    document.getElementById("result-starADD").innerHTML = "我需要小黄车凑单: " + starADD.toFixed(3) + "元";
+    document.getElementById("result-bkADD").innerHTML = "我需要博库凑单: " + bkADD.toFixed(3) + "元";
+}
+</script>
+</body>
+</html>
